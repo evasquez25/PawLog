@@ -1,0 +1,43 @@
+{
+  "name": "pawlog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0 <23",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "predev": "npm run build -w @pawlog/shared",
+    "dev": "concurrently -k -n web,api \"npm run dev -w @pawlog/web\" \"npm run dev -w @pawlog/api\"",
+    "build": "npm run build -w @pawlog/shared && npm run build -w @pawlog/api && npm run build -w @pawlog/web",
+    "typecheck": "npm run build -w @pawlog/shared && npm run typecheck --workspaces --if-present && tsc -p api/tsconfig.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run build -w @pawlog/shared && vitest run",
+    "test:concurrency": "node scripts/test-concurrency.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.10",
+    "@eslint/js": "9.39.5",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "22.20.5",
+    "@types/supertest": "7.2.1",
+    "concurrently": "10.0.6",
+    "eslint": "9.39.5",
+    "globals": "17.13.0",
+    "jsdom": "29.1.1",
+    "prettier": "3.9.10",
+    "supabase": "2.121.0",
+    "supertest": "7.3.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "5.0.5"
+  }
+}
