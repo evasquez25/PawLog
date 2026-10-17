@@ -351,7 +351,7 @@ h1 {
   margin: 14px 0 12px;
 }
 .pet-hero p {
-  font-size: 11px;
+  font-size: 16px;
   color: #78846b;
 }
 .pet-select-wrap {
@@ -1084,7 +1084,7 @@ textarea:focus-visible {
     margin: 13px 0 9px;
   }
   .pet-hero p {
-    font-size: 10px;
+    font-size: 16px;
     max-width: 155px;
     line-height: 1.6;
   }
@@ -1115,7 +1115,7 @@ textarea:focus-visible {
     letter-spacing: 1px;
   }
   .pet-select-wrap {
-    gap: 4px;
+    gap: 10px;
     font-size: 8px;
     margin-top: 15px;
   }
@@ -1380,7 +1380,7 @@ textarea:focus-visible {
     font-size: 19px;
   }
   .pet-select-wrap select {
-    font-size: 10px;
+    font-size: 16px;
   }
 }
 @media (max-width: 370px) {
