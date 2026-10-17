@@ -1,3 +1,4 @@
+import { hashCode } from '../src/services/pawlog.js';
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -177,7 +178,7 @@ describe('PawLog API contracts and authorization (database client stub)', () => 
       .post(`/api/households/${household}/invitations`)
       .set(auth)
       .expect(201);
-    expect(res.body.data.code).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(res.body.data.code).toMatch(/^[A-Za-z0-9_-]{22}$/);
     expect(rpc.mock.calls[0]?.[1].invitation_hash).toMatch(/^[a-f0-9]{64}$/);
     expect(JSON.stringify(rpc.mock.calls)).not.toContain(res.body.data.code);
     expect(res.headers['cache-control']).toBe('no-store');
@@ -247,4 +248,43 @@ describe('PawLog API contracts and authorization (database client stub)', () => 
       .send({ ...payload(), notes: 'x'.repeat(281) })
       .expect(400);
   });
+  it.each([22, 43])(
+  'accepts a %i-character invitation and hashes its exact value',
+  async (length) => {
+    const code = 'aB_-'.repeat(11).slice(0, length);
+
+    rpc.mockResolvedValue({
+      data: { household_id: household },
+      error: null,
+    });
+
+    const response = await request(app)
+      .post('/api/invitations/redeem')
+      .set(auth)
+      .send({ code: ` ${code} ` })
+      .expect(200);
+
+    expect(response.body.data.household_id).toBe(household);
+    expect(rpc).toHaveBeenCalledWith(
+      'redeem_household_invitation',
+      { invitation_hash: hashCode(code) },
+    );
+  },
+);
+
+it.each([
+  'a'.repeat(21),
+  'a'.repeat(23),
+  'a'.repeat(42),
+  'a'.repeat(44),
+  '!'.repeat(22),
+])('rejects an invalid invitation code: %s', async (code) => {
+  await request(app)
+    .post('/api/invitations/redeem')
+    .set(auth)
+    .send({ code })
+    .expect(400);
+
+  expect(rpc).not.toHaveBeenCalled();
+});
 });

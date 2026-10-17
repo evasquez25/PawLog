@@ -36,7 +36,10 @@ export const invitationRedeemSchema = z
     code: z
       .string()
       .trim()
-      .regex(/^[A-Za-z0-9_-]{43}$/, 'Enter a valid invitation code.'),
+      .regex(
+        /^(?:[A-Za-z0-9_-]{22}|[A-Za-z0-9_-]{43})$/,
+        'Enter a valid invitation code.',
+      ),
   })
   .strict();
 export const activityCreateSchema = z

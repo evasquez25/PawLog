@@ -89,8 +89,8 @@ export function HouseholdSetupPage() {
             id="invite-code"
             name="code"
             required
-            minLength={43}
-            maxLength={128}
+            minLength={22}
+            maxLength={43}
             autoCapitalize="none"
             autoComplete="off"
             spellCheck={false}

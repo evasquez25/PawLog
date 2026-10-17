@@ -131,7 +131,7 @@ export class PawlogService {
   }
   async invitation(id: string) {
     await this.household(id, true);
-    const code = randomBytes(32).toString('base64url');
+    const code = randomBytes(16).toString('base64url');
     const invitationId = await this.rpc('create_household_invitation', {
       target_household: id,
       invitation_hash: hashCode(code),
