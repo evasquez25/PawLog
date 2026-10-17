@@ -118,7 +118,7 @@ function PetDashboard() {
             <br />
             doing today?
           </h2>
-          <p>All their care. All in one happy place.</p>
+          <p>Viewing care for:</p>
           <div className="pet-select-wrap">
             <PawPrint size={16} />
             <select
@@ -132,7 +132,6 @@ function PetDashboard() {
                 </option>
               ))}
             </select>
-            <ChevronDown size={15} />
           </div>
         </div>
         <div className="portrait-wrap">
