@@ -11,7 +11,6 @@ import {
   Check,
   Heart,
   PawPrint,
-  ChevronDown,
 } from 'lucide-react';
 import { dataSchemas, type ActivityType } from '@pawlog/shared';
 import { apiRequest } from '@/services/client';
