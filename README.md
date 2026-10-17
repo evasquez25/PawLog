@@ -54,9 +54,9 @@ npm run build
 npm run format:check
 ```
 
-The 84 tests cover API authentication/contracts, input validation, household permissions, real SQL constraints/RLS/RPCs in an embedded PostgreSQL engine, activity retries, feeding conflicts, protected routes, realtime lifecycle and PWA cache/update behavior. See [testing instructions](docs/testing.md) for browser/device acceptance and the scope of those results.
+The 95 tests cover API authentication/contracts, input validation, household permissions, real SQL constraints/RLS/RPCs in an embedded PostgreSQL engine, activity retries, feeding conflicts, protected routes, realtime lifecycle and PWA cache/update behavior. See [testing instructions](docs/testing.md) for browser/device acceptance and the scope of those results.
 
-`npm run test:concurrency` is an optional separate multi-connection PostgreSQL check requiring usable local PostgreSQL binaries and permission to initialize a temporary cluster. It is not part of the 84 passing tests and was blocked by shared-memory restrictions in this environment.
+`npm run test:concurrency` is an optional separate multi-connection PostgreSQL check requiring usable local PostgreSQL binaries and permission to initialize a temporary cluster. It is not part of the 95 passing tests and was blocked by shared-memory restrictions in this environment.
 
 Builds create ignored `dist` folders. `npm run format` formats source. Shared builds first because its consumers use the emitted package exports.
 
@@ -87,6 +87,6 @@ The service worker caches static app files only. API responses, Supabase data an
 
 ## Known limits
 
-The MVP has no activity history UI, reminders, notifications, offline synchronization, or account recovery screen. Password reset and production custom SMTP remain follow-up work. Free hosting is subject to provider quotas and possible Supabase inactivity pauses; see the deployment report. The accessibility checks are focused checks, not a formal conformance certification.
+The MVP has no activity history UI, reminders, notifications, or offline write synchronization. Password recovery is implemented; see [password recovery setup](docs/password-recovery.md) for required redirects and email delivery configuration. Production custom SMTP remains an external setup task. Free hosting is subject to provider quotas and possible Supabase inactivity pauses; see the deployment report. The accessibility checks are focused checks, not a formal conformance certification.
 
 For future changes, keep migrations append-only, preserve existing household data, run the checks above, deploy, and confirm the production health endpoint and protected routes. Use the separate demo for exploratory UI changes and record actual household care only when appropriate.

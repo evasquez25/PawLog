@@ -1742,3 +1742,16 @@ textarea:focus-visible {
     gap: 8px;
   }
 }
+
+.recovery-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+.recovery-page h1 {
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+.recovery-page p {
+  line-height: 1.7;
+}

@@ -8,8 +8,8 @@ import { PetPortrait } from '@/components/pets/PetPortrait';
 export function AuthPage({ register = false }: { register?: boolean }) {
   const [message, setMessage] = useState('');
   const [pending, setPending] = useState(false);
-  const { session, loading, configured, error: sessionError } = useAuth();
-  if (!loading && session) return <Navigate to="/app" replace />;
+  const { session, loading, configured, recovering, error: sessionError } = useAuth();
+  if (!loading && session) return <Navigate to={recovering ? '/reset-password' : '/app'} replace />;
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (pending) return;
@@ -156,6 +156,11 @@ export function AuthPage({ register = false }: { register?: boolean }) {
           {!configured &&
             'Real sign-in requires your Supabase project. The sample household remains available below.'}
         </p>
+        {!register && (
+          <Link className="account-demo-link" to="/forgot-password">
+            Forgot password?
+          </Link>
+        )}
         <p className="auth-switch">
           {register ? 'Already part of the pack?' : 'New to PawLog?'}{' '}
           <Link to={register ? '/login' : '/register'}>

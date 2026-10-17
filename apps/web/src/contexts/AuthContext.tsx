@@ -3,6 +3,8 @@ import type { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 type AuthState = {
+  recovering: boolean;
+  finishRecovery: () => void;
   session: Session | null;
   loading: boolean;
   error: string;
@@ -11,6 +13,7 @@ type AuthState = {
 };
 const AuthContext = createContext<AuthState | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [recovering, setRecovering] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(Boolean(supabase));
   const [error, setError] = useState('');
@@ -25,6 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, next) => {
       authEventSeen = true;
       if (active) {
+        if (_event === 'PASSWORD_RECOVERY') setRecovering(true);
+        else if (_event === 'SIGNED_OUT') setRecovering(false);
         setSession(next);
         setLoading(false);
         setError('');
@@ -55,12 +60,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!supabase) return;
     const { error: signOutError } = await supabase.auth.signOut({ scope: 'local' });
     if (signOutError) throw new Error('Could not sign out. Please retry.');
+    setRecovering(false);
     setSession(null);
     queryClient.clear();
   }
   return (
     <AuthContext.Provider
-      value={{ session, loading, error, configured: Boolean(supabase), signOut }}
+      value={{
+        session,
+        loading,
+        error,
+        configured: Boolean(supabase),
+        signOut,
+        recovering,
+        finishRecovery: () => setRecovering(false),
+      }}
     >
       {children}
     </AuthContext.Provider>

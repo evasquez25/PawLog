@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Link, Navigate } from 'react-router';
+import { BrowserRouter, Route, Routes, Link, Navigate, useLocation } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DemoProvider } from '@/contexts/DemoContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -28,6 +28,16 @@ const DemoSettings = lazy(() =>
   import('@/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })),
 );
 const AuthPage = lazy(() => import('@/pages/AuthPage').then((m) => ({ default: m.AuthPage })));
+const PasswordRecovery = lazy(() =>
+  import('@/pages/PasswordRecoveryPage').then((m) => ({ default: m.PasswordRecoveryPage })),
+);
+function RecoveryRedirect() {
+  const { recovering } = useAuth();
+  const location = useLocation();
+  return recovering && location.pathname !== '/reset-password' ? (
+    <Navigate to="/reset-password" replace />
+  ) : null;
+}
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false, refetchOnWindowFocus: true, refetchOnReconnect: true },
@@ -45,6 +55,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <DemoProvider>
           <BrowserRouter>
             <PwaUpdates />
+            <RecoveryRedirect />
             <Suspense fallback={<LoadState />}>
               <Routes>
                 <Route path="/" element={<Start />} />
@@ -61,6 +72,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <Route path="settings" element={<DemoSettings />} />
                 </Route>
                 <Route path="/login" element={<AuthPage key="login" />} />
+                <Route path="/forgot-password" element={<PasswordRecovery key="forgot" />} />
+                <Route path="/reset-password" element={<PasswordRecovery key="reset" reset />} />
                 <Route path="/register" element={<AuthPage key="register" register />} />
                 <Route
                   path="*"
