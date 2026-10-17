@@ -1755,3 +1755,27 @@ textarea:focus-visible {
 .recovery-page p {
   line-height: 1.7;
 }
+
+/* Light sage border */
+.copy-code-button {
+  border-color: #a7b99a;
+}
+
+.copy-code-button:hover {
+  background-color: #dce6d4;
+  color: #36513a;
+}
+
+/* Brief feedback while pressing the button. */
+.copy-code-button:active {
+  background-color: #c9d8bf;
+}
+
+/* Lasting confirmation after copying succeeds. */
+.copy-code-button.is-copied,
+.copy-code-button.is-copied:hover,
+.copy-code-button.is-copied:active {
+  background-color: #486b51;
+  border-color: #486b51;
+  color: #ffffff;
+}

@@ -219,6 +219,8 @@ function InvitationForm() {
   const online = useOnline();
   const [error, setError] = useState('');
   const [code, setCode] = useState('');
+  const [copyMessage, setCopyMessage] = useState('');
+  const [copied, setCopied] = useState(false);
   const busy = useRef(false);
   const mutation = useMutation({
     networkMode: 'always',
@@ -228,6 +230,28 @@ function InvitationForm() {
         body: {},
       }),
   });
+  async function copyCode() {
+    setCopied(false);
+    setCopyMessage('');
+
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setCopyMessage('Invitation code copied. Code expires in 48 hours and can be used once.');
+    } catch {
+      const input = document.getElementById(
+        'new-invitation-code',
+      ) as HTMLInputElement | null;
+      
+      input?.focus();
+      input?.select();
+      input?.setSelectionRange(0, code.length);
+
+      setCopyMessage(
+        "Automatic copying was blocked. The code is selected-use your phone's Copy option.",
+      );
+    }
+  }
   return (
     <div className="invitation-panel">
       <h3 className="members-title">Invite a caring human</h3>
@@ -240,6 +264,8 @@ function InvitationForm() {
           if (busy.current) return;
           busy.current = true;
           setError('');
+          setCopyMessage('');
+          setCopied(false);
           try {
             const result = await mutation.mutateAsync();
             setCode(result.code);
@@ -261,8 +287,16 @@ function InvitationForm() {
             value={code}
             onFocus={(e) => e.target.select()}
           />
-          <p className="field-hint">
-            Copy it now. It won’t be shown again after leaving this page.
+          <Button
+            type="button"
+            variant="outline"
+            className={`copy-code-button mt-3 min-h-11 ${copied ? 'is-copied' : ''}`}
+            onClick={() => void copyCode()}
+          >
+            {copied ? 'Copied!' : 'Copy code'}
+          </Button>
+          <p className="field-hint" role="status">
+            {copyMessage}
           </p>
         </>
       )}
