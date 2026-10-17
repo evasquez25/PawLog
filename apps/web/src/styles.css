@@ -1142,6 +1142,7 @@ textarea:focus-visible {
     white-space: nowrap;
   }
   .activity-grid {
+    grid-template-columns: 1fr;
     gap: 12px;
   }
   .activity-card {
