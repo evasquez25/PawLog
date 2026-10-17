@@ -65,7 +65,7 @@ export function LiveSettingsPage() {
           )}
           {pets.data && pets.data.length > 0 && (
             <section className="settings-card">
-              <label htmlFor="settings-pet">Active pet</label>
+              <label htmlFor="settings-pet">Select a pet to update</label>
               <select id="settings-pet" value={petId} onChange={(e) => setPet(e.target.value)}>
                 {pets.data.map((p) => (
                   <option key={p.id} value={p.id}>

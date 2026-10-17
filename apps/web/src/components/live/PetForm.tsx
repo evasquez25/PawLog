@@ -98,7 +98,7 @@ export function PetForm({
       />
       <p className="field-hint">Use an HTTPS image link, or leave blank for an illustration.</p>
       <Button className="save-button mt-5" disabled={mutation.isPending || !online}>
-        {mutation.isPending ? 'Saving…' : pet ? 'Save pet' : 'Add pet'}
+        {mutation.isPending ? 'Saving…' : pet ? 'Update Pet' : 'Add Pet'}
       </Button>
       <FormMessage error={error} success={success} />
     </form>
