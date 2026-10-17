@@ -8,6 +8,7 @@ import { useHousehold } from '@/contexts/HouseholdContext';
 import { useOnline } from '@/hooks/useOnline';
 import { Button } from '@/components/ui/button';
 import { PetForm } from '@/components/live/PetForm';
+import { AddPetDialog } from '@/components/live/AddPetDialog';
 import { ErrorState, LoadState, FormMessage } from '@/components/live/Feedback';
 export function LiveSettingsPage() {
   const ctx = useHousehold();
@@ -83,9 +84,7 @@ export function LiveSettingsPage() {
             </section>
           )}
           {isAdmin && (
-            <section className="settings-card">
-              <PetForm key={`new-${householdId}`} />
-            </section>
+            <AddPetSection key={`new-${householdId}`} />
           )}
         </>
       )}
@@ -94,6 +93,32 @@ export function LiveSettingsPage() {
         Explore the separate sample household →
       </Link>
     </div>
+  );
+}
+function AddPetSection() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <section className="settings-card">
+      <h2>Another little companion?</h2>
+      <p className="subtext">
+        Add a pet to share their care with your household.
+      </p>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="mt-3 min-h-11"
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+      >
+        Add pet
+      </Button>
+
+      {open && (
+        <AddPetDialog onClose={() => setOpen(false)} />
+      )}
+    </section>
   );
 }
 function ProfileForm() {

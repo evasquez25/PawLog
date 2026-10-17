@@ -6,7 +6,13 @@ import { apiRequest, formError } from '@/services/client';
 import { useOnline } from '@/hooks/useOnline';
 import { Button } from '@/components/ui/button';
 import { FormMessage } from './Feedback';
-export function PetForm({ pet, onSaved }: { pet?: Pet; onSaved?: () => void }) {
+export function PetForm({ 
+  pet, onSaved, onBusyChange
+ }: { 
+  pet?: Pet; 
+  onSaved?: () => void;
+  onBusyChange?: (busy: boolean) => void;
+}) {
   const speciesId = useId();
   const { householdId, refresh, setPet } = useHousehold();
   const online = useOnline();
@@ -27,6 +33,7 @@ export function PetForm({ pet, onSaved }: { pet?: Pet; onSaved?: () => void }) {
         e.preventDefault();
         if (busy.current) return;
         busy.current = true;
+        onBusyChange?.(true);
         const form = e.currentTarget;
         setError('');
         setSuccess('');
@@ -47,6 +54,7 @@ export function PetForm({ pet, onSaved }: { pet?: Pet; onSaved?: () => void }) {
           setError(formError(err));
         } finally {
           busy.current = false;
+          onBusyChange?.(false);
         }
       }}
     >
